@@ -1,4 +1,5 @@
 "use strict";
+// src/controller/student/auth.controller.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -24,14 +25,14 @@ const signUpStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const body = req.body;
         const secret = process.env.SESSION_SECRET;
+        if (!secret)
+            throw new Error("No session secret provided");
         const salt = yield bcrypt_1.default.genSalt(10);
         const existingStudent = yield Student_model_1.Student.findOne({ phone_number: body.phone_number });
         if (existingStudent) {
             return jsonResponse.clientError("Phone number already registered");
         }
-        if (!secret)
-            throw new Error("No session secret provided");
-        // ✅ Manual validations
+        // Manual validations
         if (!body.full_name || body.full_name.trim().length < 3) {
             return jsonResponse.clientError("Full name is required and must be at least 3 characters");
         }
@@ -59,7 +60,7 @@ const signUpStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             phone_number: body.phone_number,
         });
         yield student.save();
-        const token = jsonwebtoken_1.default.sign({ user_id: student._id.toString() }, secret, {
+        const token = jsonwebtoken_1.default.sign({ user_id: String(student._id) }, secret, {
             expiresIn: "10d"
         });
         res.cookie("session", token, options);
@@ -92,21 +93,21 @@ const loginStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!student.password) {
             return jsonResponse.serverError("Password missing for this user");
         }
-        // Compare password
+        // Compare password (cast to string to satisfy TS)
         const match = yield bcrypt_1.default.compare(body.password, student.password);
         if (!match) {
             return jsonResponse.clientError("Invalid password");
         }
         // Generate token
-        const token = jsonwebtoken_1.default.sign({ user_id: student._id.toString() }, secret, {
+        const token = jsonwebtoken_1.default.sign({ user_id: String(student._id) }, secret, {
             expiresIn: "10d"
         });
         res.cookie("session", token, options);
-        const studentObj = student.toJSON(); // Assuming password hidden in schema
+        const studentObj = student.toJSON(); // Assuming password is hidden in schema
         jsonResponse.success(studentObj);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         jsonResponse.serverError();
     }
 });

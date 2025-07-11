@@ -1,7 +1,9 @@
+// src/controller/student/auth.controller.ts
+
 import JsonResponse from '../../lib/Response';
 import { Controller } from "../../types/controller";
-import { LoginStudent, SignupStudent } from "@shared/api/student/auth"
-
+import { LoginStudent, SignupStudent } from "@shared/api/student/auth";
+import { TStudent } from "@shared/model/students/Student";
 
 import { Student } from "../../models/students/Student.model";
 
@@ -16,14 +18,15 @@ export const signUpStudent: Controller = async (req, res) => {
     try {
         const body: SignupStudent.Req = req.body;
         const secret = process.env.SESSION_SECRET;
+        if (!secret) throw new Error("No session secret provided");
+
         const salt = await bcrypt.genSalt(10);
         const existingStudent = await Student.findOne({ phone_number: body.phone_number });
         if (existingStudent) {
             return jsonResponse.clientError("Phone number already registered");
         }
-        if (!secret) throw new Error("No session secret provided");
 
-        // ✅ Manual validations
+        // Manual validations
         if (!body.full_name || body.full_name.trim().length < 3) {
             return jsonResponse.clientError("Full name is required and must be at least 3 characters");
         }
@@ -61,7 +64,7 @@ export const signUpStudent: Controller = async (req, res) => {
 
         await student.save();
 
-        const token = jwt.sign({ user_id: student._id.toString() }, secret, {
+        const token = jwt.sign({ user_id: String(student._id) }, secret, {
             expiresIn: "10d"
         });
 
@@ -80,7 +83,6 @@ export const loginStudent: Controller = async (req, res) => {
   try {
     const body: LoginStudent.Req = req.body;
     const secret = process.env.SESSION_SECRET;
-
     if (!secret) throw new Error("No session secret provided");
 
     // Validate input
@@ -99,26 +101,24 @@ export const loginStudent: Controller = async (req, res) => {
       return jsonResponse.serverError("Password missing for this user");
     }
 
-    // Compare password
-    const match = await bcrypt.compare(body.password, student.password);
+    // Compare password (cast to string to satisfy TS)
+    const match = await bcrypt.compare(body.password, student.password as string);
     if (!match) {
       return jsonResponse.clientError("Invalid password");
     }
 
     // Generate token
-    const token = jwt.sign({ user_id: student._id.toString() }, secret, {
+    const token = jwt.sign({ user_id: String(student._id) }, secret, {
       expiresIn: "10d"
     });
 
     res.cookie("session", token, options);
 
-    const studentObj = student.toJSON(); // Assuming password hidden in schema
+    const studentObj = student.toJSON(); // Assuming password is hidden in schema
     jsonResponse.success(studentObj);
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     jsonResponse.serverError();
   }
 };
-
-

@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: noteswift-demo-app-1
-    env: node
-    buildCommand: npm install --include=dev && npm run build
-    startCommand: npm start
