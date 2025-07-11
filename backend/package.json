@@ -2,7 +2,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -r tsconfig-paths/register src/app.ts",
-    "start": "node compiled/backend/src/app.js",
+"start": "node compiled/backend/src/app.js"
+
+,
     "build": "tsc"
   },
   "dependencies": {
