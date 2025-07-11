@@ -74,46 +74,51 @@ export const signUpStudent: Controller = async (req, res) => {
     }
 };
 
-
 export const loginStudent: Controller = async (req, res) => {
-    const jsonResponse = new JsonResponse(res);
+  const jsonResponse = new JsonResponse(res);
 
-    try {
-        const body: LoginStudent.Req = req.body;
-        const secret = process.env.SESSION_SECRET;
+  try {
+    const body: LoginStudent.Req = req.body;
+    const secret = process.env.SESSION_SECRET;
 
-        if (!secret) throw new Error("No session secret provided");
+    if (!secret) throw new Error("No session secret provided");
 
-        // Validate input
-        if (!body.phone_number || !body.password) {
-            return jsonResponse.clientError("Phone number or password missing");
-        }
-
-        // Find student
-        const student = await Student.findOne({ phone_number: body.phone_number });
-        if (!student) {
-            return jsonResponse.clientError("Student not found");
-        }
-
-        // Compare password
-        const match = await bcrypt.compare(body.password, student.password);
-        if (!match) {
-            return jsonResponse.clientError("Invalid password");
-        }
-
-        // Generate token
-        const token = jwt.sign({ user_id: student._id.toString() }, secret, {
-            expiresIn: "10d"
-        });
-
-        res.cookie("session", token, options);
-
-        const studentObj = student.toJSON(); // Assuming you handle password hiding in schema
-        jsonResponse.success(studentObj);
-
-    } catch (error) {
-        console.log(error);
-        jsonResponse.serverError();
+    // Validate input
+    if (!body.phone_number || !body.password) {
+      return jsonResponse.clientError("Phone number or password missing");
     }
+
+    // Find student
+    const student = await Student.findOne({ phone_number: body.phone_number });
+    if (!student) {
+      return jsonResponse.clientError("Student not found");
+    }
+
+    // Check if password exists on student document
+    if (!student.password) {
+      return jsonResponse.serverError("Password missing for this user");
+    }
+
+    // Compare password
+    const match = await bcrypt.compare(body.password, student.password);
+    if (!match) {
+      return jsonResponse.clientError("Invalid password");
+    }
+
+    // Generate token
+    const token = jwt.sign({ user_id: student._id.toString() }, secret, {
+      expiresIn: "10d"
+    });
+
+    res.cookie("session", token, options);
+
+    const studentObj = student.toJSON(); // Assuming password hidden in schema
+    jsonResponse.success(studentObj);
+
+  } catch (error) {
+    console.log(error);
+    jsonResponse.serverError();
+  }
 };
+
 

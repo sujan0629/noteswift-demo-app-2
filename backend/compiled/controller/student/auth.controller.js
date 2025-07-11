@@ -88,10 +88,6 @@ const loginStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!student) {
             return jsonResponse.clientError("Student not found");
         }
-        // Check if password exists on student document
-        if (!student.password) {
-            return jsonResponse.serverError("Password missing for this user");
-        }
         // Compare password
         const match = yield bcrypt_1.default.compare(body.password, student.password);
         if (!match) {
@@ -102,7 +98,7 @@ const loginStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             expiresIn: "10d"
         });
         res.cookie("session", token, options);
-        const studentObj = student.toJSON(); // Assuming password hidden in schema
+        const studentObj = student.toJSON(); // Assuming you handle password hiding in schema
         jsonResponse.success(studentObj);
     }
     catch (error) {
