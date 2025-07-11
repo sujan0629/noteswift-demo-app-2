@@ -1,7 +1,10 @@
-import JsonResponse from "lib/Response";
-import { Controller } from "types/controller";
+import JsonResponse from '../../lib/Response';
+import { Controller } from "../../types/controller";
 import { LoginStudent, SignupStudent } from "@shared/api/student/auth"
-import { Student } from "models/students/Student.model";
+
+
+import { Student } from "../../models/students/Student.model";
+
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 

@@ -4,7 +4,8 @@ import cors from "cors"
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
-import { MainRoutes } from "routes/index.route";
+import { MainRoutes } from "./routes/index.route";
+
 import userRoutes from './routes/userRoutes';
 
 const app = Express();
