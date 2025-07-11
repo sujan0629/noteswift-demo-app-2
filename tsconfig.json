@@ -1,7 +1,0 @@
-// noteswift-demo-app/tsconfig.json
-{
-  "files": [],
-  "references": [
-    { "path": "./backend" }
-  ]
-}
