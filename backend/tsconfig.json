@@ -1,32 +1,15 @@
-// backend/tsconfig.json
 {
   "compilerOptions": {
-    "composite": true,
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["es6", "dom"],
-
-    // Make the repo root the TypeScript “rootDir” so both backend/src and shared are included
-    "rootDir": "../",
-
-    "outDir": "compiled/backend",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-
-    // ── PATH ALIAS SETUP ──────────────────────────────────────────
-    "baseUrl": ".",
+    "target": "es5",                               
+    "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["../shared/*"]
-    }
-  },
-  "include": [
-    "src/**/*",
-    "../shared/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "compiled"
-  ]
+      "@shared/*": ["../../shared/*"]
+    },                       
+    "module": "commonjs",    
+    "outDir": "compiled",                            
+    "esModuleInterop": true,                            
+    "forceConsistentCasingInFileNames": true,           
+    "strict": true,                                      
+    "skipLibCheck": true                                 
+  }
 }
