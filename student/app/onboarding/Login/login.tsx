@@ -18,10 +18,9 @@ import TextInputField from '../../../components/InputFields/TextInputField';
 import ButtonPrimary from '../../../components/Buttons/ButtonPrimary';
 import ImageHeader from '../../../components/Headers/ImageHeader';
 import { useAuthStore } from '../../../stores/authStore';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter, useLocalSearchParams } from 'expo-router';
 import { useNavStore } from '@/stores/navigationStore';
 
-import { useSearchParams } from 'expo-router/build/hooks';
 import Toast from 'react-native-toast-message';
 
 const { width } = Dimensions.get('window');
@@ -33,7 +32,7 @@ export default function Login() {
   const api_message = useAuthStore(state => state.api_message);
   const login = useAuthStore(state => state.login);
   const router = useRouter();
-const params = useSearchParams();
+  const params = useLocalSearchParams();
 
   useFocusEffect(
     useCallback(() => {
@@ -42,13 +41,13 @@ const params = useSearchParams();
       };
     }, [])
   );
-  
- useEffect(() => {
-  useNavStore.getState().setTab("RegisterAddress"); 
-}, []);
 
   useEffect(() => {
-    if (params.get('registered') === 'true') {
+    useNavStore.getState().setTab("RegisterAddress"); 
+  }, []);
+
+  useEffect(() => {
+    if (params.registered === 'true') {
       Toast.show({
         type: 'info',
         text1: 'Registration successful!',
@@ -64,54 +63,56 @@ const params = useSearchParams();
     }
   }, [params, router]);
 
-
   const isValidPhone = (value: string) => /^\d{10}$/.test(value.trim());
 
-const handleLogin = async () => {
-  if (!isValidPhone(loginData.phone_number)) {
-    Alert.alert('Invalid phone number', 'Phone number must be exactly 10 digits.');
-    return;
-  }
+  const handleLogin = async () => {
+    if (!isValidPhone(loginData.phone_number)) {
+      Alert.alert('Invalid phone number', 'Phone number must be exactly 10 digits.');
+      return;
+    }
 
-  if (!loginData.password || loginData.password.length < 4) {
-    Alert.alert('Invalid Password', 'Password must be at least 4 characters long.');
-    return;
-  }
+    if (!loginData.password || loginData.password.length < 4) {
+      Alert.alert('Invalid Password', 'Password must be at least 4 characters long.');
+      return;
+    }
 
-  const res = await login(loginData.phone_number, loginData.password);
-  if (!res) {
-    return Alert.alert(api_message);
-  }
+    const res = await login(loginData.phone_number, loginData.password);
+    if (!res) {
+      return Alert.alert(api_message);
+    }
 
-  // 1️⃣ Show the success toast
-  Toast.show({
-    type: 'success',
-    position: 'top',
-    text1: 'Success',
-    text2: 'Logged in successfully!',
-    visibilityTime: 3000,
-    autoHide: true,
-    topOffset: 50,
-  });
+    Toast.show({
+      type: 'success',
+      position: 'top',
+      text1: 'Success',
+      text2: 'Logged in successfully!',
+      visibilityTime: 3000,
+      autoHide: true,
+      topOffset: 50,
+    });
 
-  // 2️⃣ Then navigate to HomePage
-  router.push('/Home/HomePage');
-};
+    router.push('/Home/HomePage');
+  };
 
+  // FIX: stable handler for Create button press
+  const handleCreatePress = useCallback(() => {
+    useNavStore.getState().setTab("Register");
+    router.push('/onboarding/Register/register');
+  }, [router]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-<KeyboardAvoidingView
-  style={[styles.container, { backgroundColor: 'white' }]}
-  behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-  keyboardVerticalOffset={Platform.OS === 'ios' ? 1 : 0}
->
-  <ScrollView
-    contentContainerStyle={[styles.inner, { backgroundColor: 'white', paddingBottom: 40 }]}
-    keyboardShouldPersistTaps="handled"
-    showsVerticalScrollIndicator={false}
-  >
+        <KeyboardAvoidingView
+          style={[styles.container, { backgroundColor: 'white' }]}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 1 : 0}
+        >
+          <ScrollView
+            contentContainerStyle={[styles.inner, { backgroundColor: 'white', paddingBottom: 40 }]}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
             <ImageHeader source={require('../../../assets/images/illl-1.png')} />
 
             <View style={styles.form}>
@@ -132,7 +133,7 @@ const handleLogin = async () => {
                   label="Password"
                   placeholder="Enter your Password…"
                   secure
-                  value={loginData.password}
+     value={loginData.phone_number ?? ""}
                   onChangeText={text => setLoginData({ ...loginData, password: text })}
                 />
               </View>
@@ -150,15 +151,9 @@ const handleLogin = async () => {
 
                 <View style={styles.registerRow}>
                   <Text style={styles.registerText}>Don't have an account? </Text>
-          <TouchableOpacity
-  onPress={() => {
-    useNavStore.getState().setTab("Register");
-    router.push('/onboarding/Register/register');
-  }}
->
-  <Text style={styles.registerLink}>Create</Text>
-</TouchableOpacity>
-
+                  <TouchableOpacity onPress={handleCreatePress}>
+                    <Text style={styles.registerLink}>Create</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -168,6 +163,7 @@ const handleLogin = async () => {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

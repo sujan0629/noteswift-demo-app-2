@@ -27,7 +27,7 @@
     "expo-haptics": "~14.1.4",
     "expo-image": "~2.3.2",
     "expo-linking": "~7.1.7",
-    "expo-router": "~5.1.3",
+    "expo-router": "^5.1.3",
     "expo-secure-store": "^14.2.3",
     "expo-splash-screen": "^0.30.10",
     "expo-status-bar": "~2.2.3",
@@ -63,7 +63,7 @@
     "eslint-config-expo": "~9.2.0",
     "typescript": "~5.8.3"
   },
-    "expo": {
+  "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
         "listUnknownPackages": false
