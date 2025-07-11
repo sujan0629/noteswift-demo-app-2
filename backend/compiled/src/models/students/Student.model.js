@@ -1,7 +1,8 @@
-import mongoose, { model, Schema } from "mongoose";
-import { TStudent } from "../../../shared/model/students/Student"
-
-const schema = new Schema<TStudent<mongoose.Types.ObjectId>>({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Student = void 0;
+var mongoose_1 = require("mongoose");
+var schema = new mongoose_1.Schema({
     full_name: {
         type: String,
         required: true
@@ -33,11 +34,11 @@ const schema = new Schema<TStudent<mongoose.Types.ObjectId>>({
         type: String,
         required: true
     }
-}, {timestamps: true});
+}, { timestamps: true });
 schema.set("toJSON", {
-  transform: (_doc, ret) => {
-    delete ret.password;
-    return ret;
-  },
+    transform: function (_doc, ret) {
+        delete ret.password;
+        return ret;
+    },
 });
-export const Student = model("Student", schema);
+exports.Student = (0, mongoose_1.model)("Student", schema);

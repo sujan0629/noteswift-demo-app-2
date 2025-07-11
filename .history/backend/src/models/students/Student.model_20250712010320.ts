@@ -1,5 +1,5 @@
 import mongoose, { model, Schema } from "mongoose";
-import { TStudent } from "../../../shared/model/students/Student"
+import { TStudent } from "@shared/model/students/Student"
 
 const schema = new Schema<TStudent<mongoose.Types.ObjectId>>({
     full_name: {

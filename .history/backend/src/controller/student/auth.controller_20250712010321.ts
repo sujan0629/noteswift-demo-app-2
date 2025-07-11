@@ -2,7 +2,7 @@
 
 import JsonResponse from '../../lib/Response';
 import { Controller } from "../../types/controller";
-import { LoginStudent, SignupStudent } from "../../../shared/api/student/auth";
+import { LoginStudent, SignupStudent } from "@shared/api/student/auth";
 
 
 import { Student } from "../../models/students/Student.model";
