@@ -2,19 +2,18 @@
   "compilerOptions": {
     "target": "es6",
     "lib": ["es6", "dom"],
-    "baseUrl": "./src",
+    "baseUrl": ".",                // relative to backend folder
     "paths": {
-      "@shared/*": ["../../shared/*"]
+      "@shared/*": ["../shared/*"] // relative to backend folder
     },
-    "rootDirs": ["src", "../../shared"],
+    "rootDirs": ["src", "../shared"],
     "module": "commonjs",
-"outDir": "./compiled"
-,
+    "outDir": "./compiled",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "../../shared/**/*"]
+  "include": ["src/**/*", "../shared/**/*"]
 }
