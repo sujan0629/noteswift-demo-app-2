@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Student = void 0;
-const mongoose_1 = require("mongoose");
-const schema = new mongoose_1.Schema({
+var mongoose_1 = require("mongoose");
+var schema = new mongoose_1.Schema({
     full_name: {
         type: String,
         required: true
@@ -36,7 +36,7 @@ const schema = new mongoose_1.Schema({
     }
 }, { timestamps: true });
 schema.set("toJSON", {
-    transform: (_doc, ret) => {
+    transform: function (_doc, ret) {
         delete ret.password;
         return ret;
     },

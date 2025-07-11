@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateRandomEmoji = generateRandomEmoji;
 // backend/src/services/avatarService.ts
 function generateRandomEmoji() {
-    const PEOPLE_EMOJIS = [
+    var PEOPLE_EMOJIS = [
         '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🥲', '☺️',
         '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗',
         '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓',

@@ -1,48 +1,55 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class JsonResponse {
-    constructor(res) {
+var JsonResponse = /** @class */ (function () {
+    function JsonResponse(res) {
         this.res = res;
     }
-    success(result = {}, message = "success") {
+    JsonResponse.prototype.success = function (result, message) {
+        if (result === void 0) { result = {}; }
+        if (message === void 0) { message = "success"; }
         this.res.status(200).json({
             error: false,
             status: 200,
-            result,
-            message
+            result: result,
+            message: message
         });
-    }
-    serverError(message = "Internal Server Error", result = null) {
+    };
+    JsonResponse.prototype.serverError = function (message, result) {
+        if (message === void 0) { message = "Internal Server Error"; }
+        if (result === void 0) { result = null; }
         this.res.status(200).json({
             error: true,
             status: 500,
-            result,
-            message
+            result: result,
+            message: message
         });
-    }
-    notFound(message) {
+    };
+    JsonResponse.prototype.notFound = function (message) {
         this.res.status(200).json({
             error: true,
             status: 404,
             result: null,
-            message
+            message: message
         });
-    }
-    notAuthorized(message = "Not authorized") {
+    };
+    JsonResponse.prototype.notAuthorized = function (message) {
+        if (message === void 0) { message = "Not authorized"; }
         this.res.status(200).json({
             error: true,
             status: 401,
             result: null,
-            message
+            message: message
         });
-    }
-    clientError(message, result = null) {
+    };
+    JsonResponse.prototype.clientError = function (message, result) {
+        if (result === void 0) { result = null; }
         this.res.status(200).json({
             error: true,
             status: 400,
-            result,
-            message
+            result: result,
+            message: message
         });
-    }
-}
+    };
+    return JsonResponse;
+}());
 exports.default = JsonResponse;
