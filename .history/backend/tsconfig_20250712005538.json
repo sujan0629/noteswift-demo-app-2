@@ -1,14 +1,9 @@
-// backend/tsconfig.json
 {
   "compilerOptions": {
-    "composite": true,
     "target": "ES2020",
     "module": "commonjs",
-    "lib": ["es6", "dom"],
-
-    // Make the repo root the TypeScript “rootDir” so both backend/src and shared are included
-    "rootDir": "../",
-
+    "lib": ["es6","dom"],
+    "rootDir": "src",
     "outDir": "compiled/backend",
     "strict": true,
     "esModuleInterop": true,
@@ -16,17 +11,14 @@
     "skipLibCheck": true,
 
     // ── PATH ALIAS SETUP ──────────────────────────────────────────
-    "baseUrl": ".",
+    "baseUrl": ".",                   // points to noteswift-demo-app/backend
     "paths": {
-      "@shared/*": ["../shared/*"]
+      "@shared/*": ["../shared/*"]    // so @shared/foo → ../shared/foo
     }
   },
   "include": [
     "src/**/*",
-    "../shared/**/*"
+    "../shared/**/*"  // so TS can see your shared types/code
   ],
-  "exclude": [
-    "node_modules",
-    "compiled"
-  ]
+  "exclude": ["node_modules", "compiled"]
 }

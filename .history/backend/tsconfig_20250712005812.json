@@ -1,14 +1,10 @@
-// backend/tsconfig.json
 {
   "compilerOptions": {
-    "composite": true,
+    "composite": true,                   // required for project references
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["es6", "dom"],
-
-    // Make the repo root the TypeScript “rootDir” so both backend/src and shared are included
-    "rootDir": "../",
-
+    "rootDirs": ["src", "../shared"],    // combine your source + shared as one virtual root
     "outDir": "compiled/backend",
     "strict": true,
     "esModuleInterop": true,
@@ -21,10 +17,13 @@
       "@shared/*": ["../shared/*"]
     }
   },
+
+  // these include patterns must match everything you want to compile:
   "include": [
     "src/**/*",
     "../shared/**/*"
   ],
+
   "exclude": [
     "node_modules",
     "compiled"

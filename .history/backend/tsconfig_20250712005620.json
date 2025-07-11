@@ -1,13 +1,11 @@
-// backend/tsconfig.json
 {
   "compilerOptions": {
-    "composite": true,
     "target": "ES2020",
     "module": "commonjs",
-    "lib": ["es6", "dom"],
+    "lib": ["es6","dom"],
 
-    // Make the repo root the TypeScript “rootDir” so both backend/src and shared are included
-    "rootDir": "../",
+    // instead of a single rootDir, we use rootDirs
+    "rootDirs": ["src", "../shared"],  
 
     "outDir": "compiled/backend",
     "strict": true,

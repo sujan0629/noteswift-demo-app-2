@@ -1,0 +1,22 @@
+//C:\Users\Lenovo\Documents\testing-noteswiftapp\backend\tsconfig.json
+
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["es6", "dom"],
+    "baseUrl": "./src",
+    "paths": {
+      "@shared/*": ["../../shared/*"]
+    },
+    "rootDirs": ["src", "../../shared"],
+    "module": "commonjs",
+"outDir": "./compiled"
+,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "../../shared/**/*"]
+}
