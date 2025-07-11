@@ -3,8 +3,7 @@ export interface TStudent<T=string>{
     full_name: string;
     grade: number;
     phone_number: string;
-password?: string;  // make it optional
-
+    password: string;
     address: {
         province: string;
         district: string;

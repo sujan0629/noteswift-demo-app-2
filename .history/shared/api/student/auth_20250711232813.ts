@@ -23,8 +23,7 @@ export namespace SignupStudent {
 export namespace LoginStudent {
   export interface Req {
     phone_number: string;
-password?: string;  // make it optional
-
+    password: string;
   }
 
   interface Res extends TStudentWithNoSensitive{
